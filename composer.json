@@ -1,0 +1,41 @@
+{
+    "name": "includable/craft-ics-importer",
+    "description": "Imports ICS calendar feeds that can be used in your templates.",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "ics importer"
+    ],
+    "support": {
+        "docs": "https://github.com/includable/craft-ics-importer/blob/master/README.md",
+        "issues": "https://github.com/includable/craft-ics-importer/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Includable",
+            "homepage": "https://includable.com/"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "includable\\icsimporter\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "ICS importer",
+        "handle": "ics-importer",
+        "schemaVersion": "1.0.0",
+        "hasCpSettings": false,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/includable/ics-importer/master/CHANGELOG.md",
+        "class": "includable\\icsimporter\\IcsImporter"
+    }
+}
