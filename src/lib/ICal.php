@@ -6,12 +6,14 @@
  *
  * PHP 5 (≥ 5.3.0)
  *
- * @author  Jonathan Goode <https://github.com/u01jmg3>
+ * @author Jonathan Goode <https://github.com/u01jmg3>
  * @license https://opensource.org/licenses/mit-license.php MIT License
  * @version 2.1.2
  */
 
 namespace includable\icsimporter\lib;
+
+use DateTime;
 
 /**
  * Class ICal
@@ -21,51 +23,62 @@ namespace includable\icsimporter\lib;
 class ICal
 {
 
-    /* How many ToDos are in this ical? */
-    public /** @type {int} */
-        $todo_count = 0;
+    /**
+     * How many ToDos are in this ical?
+     *
+     * @var int
+     */
+    public $todo_count = 0;
 
-    /* How many events are in this ical? */
-    public /** @type {int} */
-        $event_count = 0;
+    /**
+     * How many events are in this ical?
+     *
+     * @var int
+     */
+    public $event_count = 0;
 
-    /* The parsed calendar */
-    public /** @type {Array} */
-        $cal;
+    /**
+     * The parsed calendar
+     *
+     * @var array
+     */
+    public $cal;
 
-    /* Which keyword has been added to cal at last? */
-    private /** @type {string} */
-        $_lastKeyWord;
+    /**
+     * Which keyword has been added to cal at last?
+     *
+     * @var string
+     */
+    private $_lastKeyWord;
 
     /**
      * Creates the iCal-Object
      *
      * @param {string} $filename The path to the iCal-file
      *
-     * @return Object The iCal-Object
      */
     public function __construct($filename)
     {
-        if(!$filename) {
+        if (!$filename) {
             return false;
         }
 
         $lines = file($filename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        if(stristr($lines[0], 'BEGIN:VCALENDAR') === false) {
+        if (stristr($lines[0], 'BEGIN:VCALENDAR') === false) {
             return false;
         } else {
             // TODO: Fix multiline-description problem (see http://tools.ietf.org/html/rfc2445#section-4.8.1.5)
-            foreach($lines as $line) {
+            foreach ($lines as $line) {
                 $line = trim($line);
                 $add = $this->keyValueFromString($line);
-                if($add === false) {
+                if ($add === false) {
                     $this->addCalendarComponentWithKeyAndValue($type, false, $line);
                     continue;
                 }
 
                 list($keyword, $value) = $add;
 
-                switch($line) {
+                switch ($line) {
                     // http://www.kanzaki.com/docs/ical/vtodo.html
                     case "BEGIN:VTODO":
                         $this->todo_count++;
@@ -120,9 +133,9 @@ class ICal
                                                         $keyword,
                                                         $value)
     {
-        if($keyword == false) {
+        if ($keyword == false) {
             $keyword = $this->last_keyword;
-            switch($component) {
+            switch ($component) {
                 case 'VEVENT':
                     $value = $this->cal[$component][$this->event_count - 1]
                         [$keyword] . $value;
@@ -134,12 +147,12 @@ class ICal
             }
         }
 
-        if(stristr($keyword, "DTSTART") or stristr($keyword, "DTEND")) {
+        if (stristr($keyword, "DTSTART") or stristr($keyword, "DTEND")) {
             $keyword = explode(";", $keyword);
             $keyword = $keyword[0];
         }
 
-        switch($component) {
+        switch ($component) {
             case "VTODO":
                 $this->cal[$component][$this->todo_count - 1][$keyword] = $value;
                 //$this->cal[$component][$this->todo_count]['Unix'] = $unixtime;
@@ -164,7 +177,7 @@ class ICal
     public function keyValueFromString($text)
     {
         preg_match("/([^:]+)[:]([\w\W]*)/", $text, $matches);
-        if(count($matches) == 0) {
+        if (count($matches) == 0) {
             return false;
         }
         $matches = array_splice($matches, 1, 2);
@@ -194,7 +207,7 @@ class ICal
         preg_match($pattern, $icalDate, $date);
 
         // Unix timestamp can't represent dates before 1970
-        if($date[1] <= 1970) {
+        if ($date[1] <= 1970) {
             return false;
         }
         // Unix timestamps after 03:14:07 UTC 2038-01-19 might cause an overflow
@@ -249,17 +262,17 @@ class ICal
     {
         $events = $this->sortEventsWithOrder($this->events(), SORT_ASC);
 
-        if(!$events) {
+        if (!$events) {
             return false;
         }
 
         $extendedEvents = [];
 
-        if($rangeStart !== false) {
+        if ($rangeStart !== false) {
             $rangeStart = new DateTime();
         }
 
-        if($rangeEnd !== false or $rangeEnd <= 0) {
+        if ($rangeEnd !== false or $rangeEnd <= 0) {
             $rangeEnd = new DateTime('2038/01/18');
         } else {
             $rangeEnd = new DateTime($rangeEnd);
@@ -269,9 +282,9 @@ class ICal
         $rangeEnd = $rangeEnd->format('U');
 
         // loop through all events by adding two new elements
-        foreach($events as $anEvent) {
+        foreach ($events as $anEvent) {
             $timestamp = $this->iCalDateToUnixTimestamp($anEvent['DTSTART']);
-            if($timestamp >= $rangeStart && $timestamp <= $rangeEnd) {
+            if ($timestamp >= $rangeStart && $timestamp <= $rangeEnd) {
                 $extendedEvents[] = $anEvent;
             }
         }
@@ -293,13 +306,13 @@ class ICal
         $extendedEvents = [];
 
         // loop through all events by adding two new elements
-        foreach($events as $anEvent) {
-            if(!array_key_exists('UNIX_TIMESTAMP', $anEvent)) {
+        foreach ($events as $anEvent) {
+            if (!array_key_exists('UNIX_TIMESTAMP', $anEvent)) {
                 $anEvent['UNIX_TIMESTAMP'] =
                     $this->iCalDateToUnixTimestamp($anEvent['DTSTART']);
             }
 
-            if(!array_key_exists('REAL_DATETIME', $anEvent)) {
+            if (!array_key_exists('REAL_DATETIME', $anEvent)) {
                 $anEvent['REAL_DATETIME'] =
                     date("d.m.Y", $anEvent['UNIX_TIMESTAMP']);
             }
@@ -307,7 +320,7 @@ class ICal
             $extendedEvents[] = $anEvent;
         }
 
-        foreach($extendedEvents as $key => $value) {
+        foreach ($extendedEvents as $key => $value) {
             $timestamp[$key] = $value['UNIX_TIMESTAMP'];
         }
         array_multisort($timestamp, $sortOrder, $extendedEvents);

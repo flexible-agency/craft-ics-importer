@@ -4,8 +4,8 @@
  *
  * Imports ICS calendar feeds that can be used in your templates.
  *
- * @link      https://includable.com/
- * @copyright Copyright (c) 2018 Includable
+ * @link https://flexible.agency/
+ * @copyright Copyright (c) 2020 Flxible Agency
  */
 
 namespace includable\icsimporter;
@@ -18,14 +18,7 @@ use craft\web\twig\variables\CraftVariable;
 use yii\base\Event;
 
 /**
- * Craft plugins are very much like little applications in and of themselves. We’ve made
- * it as simple as we can, but the training wheels are off. A little prior knowledge is
- * going to be required to write a plugin.
- *
- * For the purposes of the plugin docs, we’re going to assume that you know PHP and SQL,
- * as well as some semi-advanced concepts like object-oriented programming and PHP namespaces.
- *
- * https://craftcms.com/docs/plugins/introduction
+ * ICS importer plugin.
  *
  * @author    Includable
  * @package   IcsImporter

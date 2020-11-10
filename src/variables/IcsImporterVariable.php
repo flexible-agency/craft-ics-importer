@@ -4,8 +4,8 @@
  *
  * Imports ICS calendar feeds that can be used in your templates.
  *
- * @link      https://includable.com/
- * @copyright Copyright (c) 2018 Includable
+ * @link https://flexible.agency/
+ * @copyright Copyright (c) 2020 Flxible Agency
  */
 
 namespace includable\icsimporter\variables;
@@ -13,6 +13,7 @@ namespace includable\icsimporter\variables;
 use DateTime;
 use DateTimeZone;
 
+use Exception;
 use includable\icsimporter\lib\ICal;
 
 /**
@@ -33,6 +34,10 @@ class IcsImporterVariable
     // Public Methods
     // =========================================================================
 
+    /**
+     * @param $str
+     * @return string|string[]
+     */
     private function processFieldValue($str)
     {
         $str = str_replace('\n', "\n", $str);
@@ -41,10 +46,15 @@ class IcsImporterVariable
         return $str;
     }
 
+    /**
+     * @param $params
+     * @return array
+     * @throws Exception
+     */
     public function feed($params)
     {
         if(empty($params) || !isset($params['url'])) {
-            throw new \Exception('Feed parameters should at least contain a URL.');
+            throw new Exception('Feed parameters should at least contain a URL.');
         }
 
         $filename = '/tmp/ical-x-' . sha1($params['url']) . '.phps';

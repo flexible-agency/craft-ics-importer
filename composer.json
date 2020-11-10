@@ -11,18 +11,18 @@
         "ics importer"
     ],
     "support": {
-        "docs": "https://github.com/includable/craft-ics-importer/blob/master/README.md",
-        "issues": "https://github.com/includable/craft-ics-importer/issues"
+        "docs": "https://github.com/flexible-agency/craft-ics-importer/blob/master/README.md",
+        "issues": "https://github.com/flexible-agency/craft-ics-importer/issues"
     },
-    "license": "MIT",
+    "license": "proprietary",
     "authors": [
         {
-            "name": "Includable",
-            "homepage": "https://includable.com/"
+            "name": "Flexible Agency",
+            "homepage": "https://flexible.agency/"
         }
     ],
     "require": {
-        "craftcms/cms": "^3.0.0-RC1"
+        "craftcms/cms": "^3.0.0"
     },
     "autoload": {
         "psr-4": {
@@ -35,7 +35,7 @@
         "schemaVersion": "1.0.0",
         "hasCpSettings": false,
         "hasCpSection": false,
-        "changelogUrl": "https://raw.githubusercontent.com/includable/ics-importer/master/CHANGELOG.md",
+        "changelogUrl": "https://raw.githubusercontent.com/flexible-agency/ics-importer/master/CHANGELOG.md",
         "class": "includable\\icsimporter\\IcsImporter"
     }
 }
